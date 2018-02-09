@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		ApplicationUser applicationUser = applicationUserRepository.findByLogin(login);
 		if (applicationUser == null)
 			throw new UsernameNotFoundException(login);
-		return new User(applicationUser.getLogin(), applicationUser.getPassword(),
+		
+		String password = applicationUser.getPassword();
+		
+		if (applicationUser.getType().equals("LDAP"))
+			password = "DumbPassword";
+		
+		return new CustomUser(applicationUser.getLogin(), password, applicationUser.getType(),
 				Arrays.asList(new SimpleGrantedAuthority("ROLE_" + applicationUser.getRole())));
 	}
 

@@ -28,8 +28,9 @@ public class ApplicationUser {
 	private final String login;
 	private final String password;
 	private final String role;
+	private final String type;
 	
 	public ApplicationUser() {
-		this(null, null, null, null);
+		this(null, null, null, null, null);
 	}
 }

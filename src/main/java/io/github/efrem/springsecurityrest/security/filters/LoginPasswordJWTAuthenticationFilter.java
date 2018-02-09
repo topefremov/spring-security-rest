@@ -62,7 +62,7 @@ public class LoginPasswordJWTAuthenticationFilter extends UsernamePasswordAuthen
 
 		res.addCookie(getHttpOnlySecureCookie(X_TOKEN, token));
 	}
-	
+	 
 	private Cookie getHttpOnlySecureCookie(String cookieName, String value) {
 		Cookie cookie = new Cookie(cookieName, value);
 		cookie.setHttpOnly(true);

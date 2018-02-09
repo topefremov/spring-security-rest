@@ -30,4 +30,11 @@ public class TestController {
 				new BasicResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), "This is secure endpoint"));
 
 	}
+	
+	@GetMapping("all")
+	ResponseEntity<BasicResponse> forAllAuthenticated() {
+		return ResponseEntity.ok(
+				new BasicResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), "This is secure endpoint"));
+
+	}
 }

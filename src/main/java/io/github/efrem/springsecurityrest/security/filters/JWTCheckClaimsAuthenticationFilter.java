@@ -37,8 +37,10 @@ public class JWTCheckClaimsAuthenticationFilter extends OncePerRequestFilter {
 
 		if (token.isPresent()) {
 			String tokenString = token.get();
-			UsernamePasswordAuthenticationToken authentication = getAuthentication(tokenString);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			if (!tokenString.isEmpty()) {
+				UsernamePasswordAuthenticationToken authentication = getAuthentication(tokenString);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 		}
 
 		chain.doFilter(req, res);
