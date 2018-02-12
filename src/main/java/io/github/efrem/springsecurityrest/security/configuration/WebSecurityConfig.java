@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -40,12 +41,13 @@ public class WebSecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.cors().and().csrf().disable().authorizeRequests().antMatchers("/login").permitAll()
-					.antMatchers("/logout").fullyAuthenticated().anyRequest().fullyAuthenticated().and()
+			http.cors().and().csrf().disable().anonymous().disable().authorizeRequests().antMatchers("/login")
+					.permitAll().anyRequest().fullyAuthenticated().and()
 					.addFilterBefore(new JWTCheckClaimsAuthenticationFilter(), BasicAuthenticationFilter.class)
-					.addFilter(new LoginPasswordJWTAuthenticationFilter(authenticationManager())).logout()
-					.deleteCookies(X_TOKEN).logoutSuccessHandler(new LogoutSuccessHandlerImpl()).and()
-					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+					.addFilter(new LoginPasswordJWTAuthenticationFilter(authenticationManager())).sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().logout()
+					.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST")).deleteCookies(X_TOKEN)
+					.logoutSuccessHandler(new LogoutSuccessHandlerImpl());
 		}
 
 		@Override
