@@ -1,36 +1,30 @@
 package io.github.efrem.springsecurityrest.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
-@RequiredArgsConstructor
-@Getter
-@EqualsAndHashCode
-@ToString
+import static javax.persistence.FetchType.*;
+
+@Data
 @Entity
 public class ApplicationUser {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "application_user_seq")
 	@SequenceGenerator(name = "application_user_seq", sequenceName = "application_user_seq", allocationSize = 1)
-	private final Long id;
+	private Long id;
 	
 	@Column(nullable = false, unique = true)
-	private final String login;
-	private final String password;
-	private final String role;
-	private final String type;
+	private String login;
+	private String password;
+	private String role;
+	private String type;
+
+	@ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "organization_id")
+    @JsonBackReference
+	private Organization organization;
 	
-	public ApplicationUser() {
-		this(null, null, null, null, null);
-	}
 }
